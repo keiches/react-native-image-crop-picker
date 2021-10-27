@@ -94,6 +94,9 @@ class PickerModule extends ReactContextBaseJavaModule implements ActivityEventLi
     private int width = 0;
     private int height = 0;
 
+    private int maxWidth = 0;
+    private int maxHeight = 0;
+
     private Uri mCameraCaptureURI;
     private String mCurrentMediaPath;
     private ResultCollector resultCollector = new ResultCollector();
@@ -683,12 +686,28 @@ class PickerModule extends ReactContextBaseJavaModule implements ActivityEventLi
             configureCropperColors(options);
         }
 
+        File file = new File(this.getTmpDir(activity), UUID.randomUUID().toString() + ".jpg");
+
+        /*
+        BitmapFactory.Options bfOptions = new BitmapFactory.Options();
+        bfOptions.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(file.getAbsolutePath(), bfOptions);
+        int imageHeight = bfOptions.outHeight;
+        int imageWidth = bfOptions.outWidth;
+
+        Log.e('**keiches**', imageWidth, imageHeight);
+        */
+
         UCrop uCrop = UCrop
-                .of(uri, Uri.fromFile(new File(this.getTmpDir(activity), UUID.randomUUID().toString() + ".jpg")))
+                .of(uri, Uri.fromFile(file))
                 .withOptions(options);
 
         if (width > 0 && height > 0) {
             uCrop.withAspectRatio(width, height);
+        }
+
+        if (maxWidth > 0 && maxHeight > 0) {
+            uCrop.withMaxResultSize(maxWidth, maxHeight);
         }
 
         uCrop.start(activity);

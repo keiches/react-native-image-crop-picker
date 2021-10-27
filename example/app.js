@@ -32,9 +32,12 @@ export default class App extends Component {
   pickSingleWithCamera(cropping, mediaType = 'photo') {
     ImagePicker.openCamera({
       cropping: cropping,
-      width: 500,
-      height: 500,
+      width: 4,
+      height: 3,
       includeExif: true,
+      maxWidth: 500,
+      maxHeight: 500,
+      compressImageQuality: 1,
       mediaType,
     })
       .then((image) => {
@@ -217,11 +220,15 @@ export default class App extends Component {
   }
 
   renderImage(image) {
+    const {width, height} = image;
     return (
-      <Image
-        style={{ width: 300, height: 300, resizeMode: 'contain' }}
-        source={image}
-      />
+      <View style={{width: '100%'}}>
+        <Text>width: {width} height: {height}</Text>
+        <Image
+          style={{ width, height, resizeMode: 'contain' }}
+          source={image}
+        />
+      </View>
     );
   }
 
